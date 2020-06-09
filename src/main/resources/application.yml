@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework: error
+
+##Database Settings
+##spring.datasource.url=jdbc:log4jdbc:mariadb://localhost:3306/devmin?autoReconnect=true&useSSL=false
+##spring.datasource.username=root
+##spring.datasource.password=root
+##spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+
+##JPA Settings
+##spring.jpa.hibernate.ddl-auto=none
+#spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+##SQL Log
+#spring.jpa.show-sql=true
+#spring.jpa.properties.hibernate.format_sql=true
+ 
+# log level config
+##logging.level.org.springframework.web=INFO
+##logging.level.org.hibernate=INFO
