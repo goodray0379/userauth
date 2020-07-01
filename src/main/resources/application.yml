@@ -20,6 +20,13 @@ spring:
       name: username
       password: password
 
+app:
+  auth:
+    token-secret: youngmin
+    token-expiration-msec: 300
+    token-prefix: Bearer
+    token-header-string: Authorization
+
 #  h2:
 #    console:
 #      enabled: true
