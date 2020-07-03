@@ -1,8 +1,8 @@
-package com.devmin.userauth.controller.exception;
+package com.devmin.userauth.exception.handler;
 
 import java.util.Date;
 
-import com.devmin.userauth.domain.exception.ExceptionResponse;
+import com.devmin.userauth.exception.response.ExceptionResponse;
 import com.devmin.userauth.exception.UserNotFoundException;
 
 import org.springframework.http.HttpHeaders;

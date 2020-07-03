@@ -1,4 +1,4 @@
-package com.devmin.userauth.domain.exception;
+package com.devmin.userauth.exception.response;
 
 import java.util.Date;
 
