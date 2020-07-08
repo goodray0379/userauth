@@ -3,8 +3,10 @@ package com.devmin.userauth.domain;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence. *;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
@@ -24,7 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "user")
-@JsonIgnoreProperties(value = {
+@JsonIgnoreProperties(allowSetters = true, value = {
     "password"
 })
 public class User implements UserDetails {
@@ -36,13 +38,15 @@ public class User implements UserDetails {
     private long id;
 
     @Column
-    @Size(min = 2, message = "Name은 2글자 이상 입력해 주세요.")
+    @Size(min = 2, message = "Username은 2글자 이상 입력해 주세요.")
+    @NotNull(message = "Username은 Null 일 수 없습니다.")
     private String username;
 
     @Column
     private String password;
 
     @Column
+    @NotNull(message = "Name은 Null 일 수 없습니다.")
     private String name;
 
     @Column
@@ -54,11 +58,10 @@ public class User implements UserDetails {
 
     @Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-        ArrayList<GrantedAuthority> auth = new ArrayList<GrantedAuthority>();
+        List<GrantedAuthority> auth = new ArrayList<GrantedAuthority>();
         auth.add(new SimpleGrantedAuthority(authority));
         return auth;
 	}
-
 
     @Override 
     public boolean isAccountNonExpired() {

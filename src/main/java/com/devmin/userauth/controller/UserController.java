@@ -1,17 +1,18 @@
 package com.devmin.userauth.controller;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.Valid;
 
+import com.devmin.userauth.component.JwtTokenProvider;
 import com.devmin.userauth.domain.User;
 import com.devmin.userauth.exception.UserNotFoundException;
 import com.devmin.userauth.service.UserService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,12 +22,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    private UserService service;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserService service;
 
 
     @GetMapping
@@ -36,11 +41,13 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> createUser(@Valid @RequestBody User user){
-        User savedUser = service.save(user);
+        System.out.println(user.getPassword());
+        user.setPassword( passwordEncoder.encode( user.getPassword() ) );
+        service.save(user);
         
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/{id}")
-                    .buildAndExpand(savedUser.getId())
+                    .buildAndExpand(user.getId())
                     .toUri();
 
         return ResponseEntity.created(location).build();
@@ -56,8 +63,15 @@ public class UserController {
         service.deleteById(id);
     }
 
-    @PostMapping(path = "/auth")
-    public Map<String, Object> login(@RequestBody User user){
-        return null;
+    @PostMapping(path = "/token")
+    public String login(@RequestBody User user){
+        User member = service.findByUsername( user.getUsername() ).orElseThrow( () -> new UserNotFoundException( String.format( "Username[%s] not found", user.getUsername()) ) );
+        if(passwordEncoder.matches(user.getPassword(), member.getPassword())){
+            List<String> auth = new ArrayList<String>();
+            auth.add(member.getAuthority());
+            return jwtTokenProvider.createToken( member.getUsername(), auth );
+        }else{
+           throw new UserNotFoundException( String.format( "Username[%s] not found", user.getUsername() ) );
+        }
     }
 }
