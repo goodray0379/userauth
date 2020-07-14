@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence. *;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
@@ -13,6 +13,8 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,12 +28,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "user")
+@DynamicInsert
+@DynamicUpdate
 @JsonIgnoreProperties(allowSetters = true, value = {
     "password"
 })
 public class User implements UserDetails {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -2936566448092867306L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -43,6 +47,7 @@ public class User implements UserDetails {
     private String username;
 
     @Column
+    @NotNull(message = "Password는 Null 일 수 없습니다.")
     private String password;
 
     @Column

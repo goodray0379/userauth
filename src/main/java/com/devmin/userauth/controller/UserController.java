@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     private final PasswordEncoder passwordEncoder;
@@ -41,7 +41,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> createUser(@Valid @RequestBody User user){
-        System.out.println(user.getPassword());
+
         user.setPassword( passwordEncoder.encode( user.getPassword() ) );
         service.save(user);
         
