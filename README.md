@@ -18,4 +18,4 @@ B. Swaager 2.9.2
 
 ### 보완해야할 부분
 
-refresh 토큰의 
+refresh 토큰의 활용 미구현
